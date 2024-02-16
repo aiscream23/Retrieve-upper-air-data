@@ -8,12 +8,22 @@ from selenium.webdriver.common.by import By
 
 driver = webdriver.Firefox()
 
-year = 2023
-# month = 3
+import argparse
+
+parser = argparse.ArgumentParser(description='Download upper air data.')
+
+parser.add_argument('year', type=int, help='Tahun, contohnya 2023.')
+parser.add_argument('station', type=str, help='kode stasiun WMOID. contoh 96749 (STAMET Soekarno Hatta')
+
+
+args = parser.parse_args()
+year = args.year
+station = args.station
+
 
 for month in range(1,13):
     try:
-        url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=3112&STNM=96749" 
+        url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=3112&STNM={station}" 
         driver.get(url)
         
         tag_body = driver.find_elements(By.TAG_NAME, "body")
@@ -25,7 +35,7 @@ for month in range(1,13):
         
         if driver.find_elements(By.TAG_NAME, "pre")[0].text == "Invalid TIME parameter." :
             # untuk bulan dengan jumlah tanggal 30
-            url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=3012&STNM=96749"
+            url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=3012&STNM={station}"
             driver.get(url)
 
             tag_body = driver.find_elements(By.TAG_NAME, "body")
@@ -37,7 +47,7 @@ for month in range(1,13):
             
             if driver.find_elements(By.TAG_NAME, "pre")[0].text == "Invalid TIME parameter.":
                 # untuk bulan dengan jumlah tanggal 29
-                url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=2912&STNM=96749"
+                url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=2912&STNM={station}"
                 driver.get(url)
 
                 tag_body = driver.find_elements(By.TAG_NAME, "body")
@@ -49,7 +59,7 @@ for month in range(1,13):
 
                 if driver.find_elements(By.TAG_NAME, "pre")[0].text == "Invalid TIME parameter.":
                     # untuk bulan dengan jumlah tanggal 28
-                    url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=2812&STNM=96749"
+                    url = f"https://weather.uwyo.edu/cgi-bin/sounding?region=seasia&TYPE=TEXT%3ALIST&YEAR={year}&MONTH={month:02d}&FROM=0100&TO=2812&STNM={station}"
                     driver.get(url)
 
                     tag_body = driver.find_elements(By.TAG_NAME, "body")
